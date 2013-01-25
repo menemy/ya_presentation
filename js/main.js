@@ -72,6 +72,18 @@ $(function(){
     $(".presentations").touchwipe({
         wipeLeft: next,
         wipeRight: prev,
+        wipeUp: function(){
+            currentPresentationIdx = Math.max(0, currentPresentationIdx - 1);
+            //reset pager
+            currentSlideIdx = 0;
+            historyChanged();
+        },
+        wipeDown: function(){
+            currentPresentationIdx = Math.min(currentPresentationIdx + 1, $(".presentation").length - 1);
+            //reset pager
+            currentSlideIdx = 0;
+            historyChanged();
+        },
         min_move_x: 20,
         min_move_y: 20,
         preventDefaultEvents: true

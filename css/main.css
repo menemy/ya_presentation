@@ -142,7 +142,7 @@ nav#controls:hover {
     padding: 10px 16px;
     position: absolute;
     top: 0;
-    transition: margin 0.2s ease-in-out 0s;
+
     z-index: 999;
 
     background: #e5e5e5; /* Old browsers */
@@ -170,4 +170,27 @@ nav#controls:hover {
 }
 #menu ul li:hover {
     text-decoration: none;
+}
+
+
+@media screen and (max-device-width: 480px){
+    nav#controls button {
+        font-size: 40px;
+    }
+
+    nav#controls button.current-slide {
+        font-size: 40px;
+    }
+
+    span.current-title {
+        font-size: 30px;
+    }
+
+}
+
+@media screen and (max-device-width: 480px)and (orientation : landscape){
+    .slide {
+        height: 500px;
+        margin-top: -250px;
+    }
 }
