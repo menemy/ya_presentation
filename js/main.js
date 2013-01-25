@@ -10,7 +10,7 @@ $(function(){
                currentPresentationIdx = index;
                //reset pager
                currentSlideIdx = 0;
-               rebuildPresentations();
+               historyChanged();
                $("#menu").hide();
            })
            .appendTo("#menu ul");
@@ -25,7 +25,6 @@ $(function(){
         );
         $("#menu ul li").removeClass("selected");
         $("#menu ul li").eq(currentPresentationIdx).addClass("selected");
-        historyChanged();
     }
     rebuildPresentations();
 
@@ -84,6 +83,10 @@ $(function(){
 
     History.Adapter.bind(window,'statechange',function(){
         var State = History.getState();
+        if(State.data && typeof State.data.presentation != "undefined"){
+            currentPresentationIdx = State.data.presentation;
+            rebuildPresentations();
+        }
         if(State.data && typeof State.data.slide != "undefined"){
             currentSlideIdx = State.data.slide;
             rebuildSlides();
