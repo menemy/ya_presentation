@@ -1,6 +1,7 @@
 $(function(){
     var currentPresentationIdx = 0;
     var currentSlideIdx = 0;
+    var currentPresentation;
     var History = window.History;
 
     //prepare list of presentation
@@ -16,6 +17,12 @@ $(function(){
            .appendTo("#menu ul");
     });
 
+    //First load, history init
+    History.replaceState({slide: currentSlideIdx, presentation: currentPresentationIdx}, null, "?slide="+currentSlideIdx+"&presentation="+currentPresentationIdx);
+    rebuildSlides();
+    rebuildPresentations();
+
+
     function rebuildPresentations(){
         $(".presentation").hide();
         currentPresentation = $(".presentation").get(currentPresentationIdx);
@@ -26,7 +33,6 @@ $(function(){
         $("#menu ul li").removeClass("selected");
         $("#menu ul li").eq(currentPresentationIdx).addClass("selected");
     }
-    rebuildPresentations();
 
     function rebuildSlides(){
         var classes = [ 'far-prev', 'prev', 'current', 'next', 'far-next'];
@@ -46,14 +52,33 @@ $(function(){
         History.pushState({slide: currentSlideIdx, presentation: currentPresentationIdx}, null, "?slide="+currentSlideIdx+"&presentation="+currentPresentationIdx);
     }
     var prev = function(){
-        currentSlideIdx = Math.max(0, currentSlideIdx - 1);
-        historyChanged();
-        rebuildSlides();
+        if(currentSlideIdx - 1 >= 0){
+            currentSlideIdx--;
+            historyChanged();
+        }
     };
+    var prevPresentation =  function(){
+        if(currentPresentationIdx - 1 >= 0){
+            currentPresentationIdx--;
+            //reset pager
+            currentSlideIdx = 0;
+            historyChanged();
+        }
+    };
+
     var next = function(){
-        currentSlideIdx = Math.min(currentSlideIdx + 1, $(".slide", currentPresentation).length - 1);
-        historyChanged();
-        rebuildSlides();
+        if(currentSlideIdx + 1 <= $(".slide", currentPresentation).length - 1){
+            currentSlideIdx++;
+            historyChanged();
+        }
+    };
+    var nextPresentation = function(){
+        if(currentPresentationIdx + 1 <= $(".presentation").length - 1){
+            currentPresentationIdx++;
+            //reset pager
+            currentSlideIdx = 0;
+            historyChanged();
+        }
     };
 
     $("#controls .btn-prev").click(prev);
@@ -66,24 +91,18 @@ $(function(){
             case 39:  // right arrow
             case 32:  // space
                 next(); break;
+            case 38:  // up arrow
+                prevPresentation(); break;
+            case 40:  // down arrow
+                nextPresentation(); break;
         }
     })
 
     $(".presentations").touchwipe({
         wipeLeft: next,
         wipeRight: prev,
-        wipeUp: function(){
-            currentPresentationIdx = Math.max(0, currentPresentationIdx - 1);
-            //reset pager
-            currentSlideIdx = 0;
-            historyChanged();
-        },
-        wipeDown: function(){
-            currentPresentationIdx = Math.min(currentPresentationIdx + 1, $(".presentation").length - 1);
-            //reset pager
-            currentSlideIdx = 0;
-            historyChanged();
-        },
+        wipeUp: prevPresentation,
+        wipeDown: nextPresentation,
         min_move_x: 20,
         min_move_y: 20,
         preventDefaultEvents: true
@@ -104,9 +123,5 @@ $(function(){
             rebuildSlides();
         }
     });
-
-    //Init
-    History.replaceState({slide: currentSlideIdx, presentation: currentPresentationIdx}, null, "?slide="+currentSlideIdx+"&presentation="+currentPresentationIdx);
-    rebuildSlides();
 
 });
