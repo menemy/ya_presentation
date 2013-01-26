@@ -172,7 +172,7 @@ nav#controls:hover {
     text-decoration: none;
 }
 
-
+/*iphone*/
 @media screen and (max-device-width: 480px){
     nav#controls button {
         font-size: 40px;
@@ -195,6 +195,38 @@ nav#controls:hover {
 }
 
 @media screen and (max-device-width: 480px)and (orientation : landscape){
+    .slide {
+        height: 500px;
+        margin-top: -250px;
+    }
+}
+
+
+
+/*Ipad*/
+@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) {
+    nav#controls button {
+        font-size: 40px;
+    }
+
+    nav#controls button.current-slide {
+        font-size: 40px;
+    }
+
+    span.current-title {
+        font-size: 30px;
+    }
+    #menu ul li:first-child {
+        padding-top: 30px;
+    }
+    #menu ul li {
+        padding-bottom: 30px;
+    }
+
+}
+
+
+@media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
     .slide {
         height: 500px;
         margin-top: -250px;
